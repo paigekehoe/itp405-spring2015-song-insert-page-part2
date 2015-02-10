@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html>
+<?php     require_once __DIR__ . "/vendor/autoload.php";
 
-    
-<link href="css/bootstrap.css" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-</head>
- <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-<?php 
-    require_once __DIR__ . "/Database.php";
-	require_once __DIR__ . "/Song.php";
-    require_once __DIR__ . "/GenreQuery.php";
-    require_once __DIR__ . "/ArtistQuery.php";
+
+use Itp\Music\GenreQuery;
+use Itp\Music\ArtistQuery;
+use Itp\Music\Song;
+use Symfony\Component\HttpFoundation\Session\Session;
+
+$session = new Session();
+$session->start();
+
 
     if (isset($_POST['submit'])) :
-		
+
 		$song = new Song();
         
         $song->setTitle($_POST['song_title']);
@@ -25,19 +19,45 @@
         $song->setGenreId($_POST['genre_id']);
         $song->setPrice($_POST['price']);
         $song->save();
+
+
+
+
+        $mess = 'The song '. $song->getTitle().
+            'with an ID of '. $song->getId(). ' was inserted successfully!';
+
+        $session->getFlashBag()->add('song-success', $mess);
+
+
+        header('Location: add-song.php');
+        exit;
         
-        ?>
+        endif; ?>
+
+<!DOCTYPE html>
+        <html>
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        </head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <head>
     <title>Add Song</title>
     
 <head>
     <body>
-<p>The song <?php echo $song->getTitle() ?>
-   with an ID of <?php echo $song->getId() ?> was inserted successfully!</p>    
 
+        Add your song:
 
-<?php else : 
-        
+    <?php foreach ($session->getFlashBag()->get('song-success') as $message) : ?>
+            <p><?php echo $message ?></p>
+    <?php endforeach; ?>
+
+<?php
+
     $artists = (new ArtistQuery())->getAll();
     $genres = (new GenreQuery())->getAll();
 ?>
@@ -80,5 +100,3 @@
 </body>
 
 </html>
-    
-    <?php endif; ?>

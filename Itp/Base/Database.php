@@ -1,5 +1,9 @@
 <?php 
 
+namespace Itp\Base;
+
+use \PDO;
+
 class Database {
 	protected static $pdo;
 	private $host = 'itp460.usc.edu';

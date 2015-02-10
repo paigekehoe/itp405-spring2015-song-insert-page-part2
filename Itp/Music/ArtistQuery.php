@@ -1,8 +1,10 @@
 <?php 
 
-require_once __DIR__ . "/Database.php";
+namespace Itp\Music;
 
-class ArtistQuery extends Database {
+use \PDO;
+
+class ArtistQuery extends \Itp\Base\Database {
 	public function getAll(){
         $sql = "
                 SELECT *

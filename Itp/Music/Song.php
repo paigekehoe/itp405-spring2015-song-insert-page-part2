@@ -1,7 +1,9 @@
 <?php 
-require_once __DIR__ . "/Database.php";
 
-class Song extends Database {
+namespace Itp\Music;
+
+
+class Song extends \Itp\Base\Database {
     private $song_title;
     private $artist_id;
     private $genre_id;
