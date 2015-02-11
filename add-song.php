@@ -1,6 +1,5 @@
 <?php     require_once __DIR__ . "/vendor/autoload.php";
 
-
 use Itp\Music\GenreQuery;
 use Itp\Music\ArtistQuery;
 use Itp\Music\Song;
@@ -9,19 +8,17 @@ use Symfony\Component\HttpFoundation\Session\Session;
 $session = new Session();
 $session->start();
 
-
     if (isset($_POST['submit'])) :
 
 		$song = new Song();
-        
+        if(!$_POST['song_title']){
+            header('Location: add-song.php');
+        }
         $song->setTitle($_POST['song_title']);
         $song->setArtistId($_POST['artist_id']);
         $song->setGenreId($_POST['genre_id']);
         $song->setPrice($_POST['price']);
         $song->save();
-
-
-
 
         $mess = 'The song '. $song->getTitle().
             'with an ID of '. $song->getId(). ' was inserted successfully!';
